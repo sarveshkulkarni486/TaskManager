@@ -36,3 +36,120 @@
     transform: rotate(360deg);
   }
 }
+
+/* adding navbar css */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+.navbar-nav {
+  font-family: 'Playfair', sans-serif;
+  font-size: 16px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-left: 40px;
+  transition: all 0.3s ease;
+}
+.nav-item {
+  margin-right: 10px;
+}
+.nav-link {
+  color: white !important;
+  text-decoration: none;
+  position: relative;
+}
+.nav-link:hover {
+  color: #007bff;
+}
+.navbar-brand {
+  color: white !important;
+}
+.nav-link:hover::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #007bff;
+  bottom: 0;
+  left: 0;
+}
+.btn {
+  font-family: 'Times New Roman', Times, serif;
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
+}
+.vl {
+  border-left: 2px solid #bcbcbc;
+  height: 30px;
+  margin-right: 20px;
+}
+.container {
+  background-image: url('./Components/images/background.gif');
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  min-width: 100vw;
+}
+h1 {
+  text-align: center;
+  padding-top: 16rem;
+  margin-left: 2rem;
+  font-size: 18px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-weight: bold;
+  color: white !important;
+}
+p {
+  text-align: center;
+  font-size: 16px;
+  margin-left: 2rem;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: white !important;
+}
+.btn1 {
+  display: flex;
+  align-items: center;
+  margin-left: 31rem !important;
+  justify-content: center;
+  color: white !important;
+  background-color: orange !important;
+}
+.btn2 {
+  color: green !important;
+  margin-left: 22px;
+  background-color: aliceblue !important;
+
+}
+@media (max-width: 720px) {
+  .btn1 {
+    width: 50%;
+    margin-right: 10rem;
+    margin-left: 0rem;
+    margin-top: 1rem;
+  }
+  .btn2 {
+    margin-top: 1rem;
+    margin-right: 0rem;
+    margin-left: 10rem;
+    width: 50%;
+  }
+  .navbar-nav {
+    font-family: 'Playfair', sans-serif;
+  }
+  
+}
+.container {
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100vh;
+  z-index: 1;
+}
