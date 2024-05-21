@@ -2,21 +2,40 @@ import React, { useState } from "react";
 import './login.css';
 import {Button, Card} from 'react-bootstrap';
 import useLocalStorage from 'use-local-storage';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = ({handleLoginClick}) => {
-   const[theme, setTheme] = useLocalStorage('theme' ? 'dark' : 'light')
-   const switchTheme = () => {
-      const newTheme = theme === 'light' ? 'dark' :'light';
-      setTheme(newTheme)
-   }
    const [email, setEmail] = useState();
    const [password, setPassword] = useState('');
+   const[cnfpassword, setCnfPassword] = useState('');
+   const [message, setMessage] = useState('');
+   const navigate = useNavigate();
+
+   const handleLogin = async(e)=> {
+      e.preventDefault();
+      const candidate = {email, password};
+      if(password !== cnfpassword) {
+         setMessage('Passwords does not match');
+         return;
+      }
+      try {
+         const res = await axios.post('http://localhost:5000/login/', candidate);
+         setMessage('Login successfully');
+         localStorage.setItem('token', res.data.toke);
+         navigate('/Register');
+      } catch(err) {
+         setMessage('Invalid credentials');
+         console.error(err);
+      }
+   };
+
    return(
       <div>
       <form class="form">
          <p class="title">Login </p>
          <p class="message">Login and Unleash Productivity. Your journey to effortless Task Management Begins here </p>
+         {message && <p className="message">{message}</p>}
             <label for="email">Email
                <input class="input" id="email" type="email" placeholder="" required="" />
             </label> 

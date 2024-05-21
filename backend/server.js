@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -8,62 +7,81 @@ const jwt = require('jsonwebtoken');
 
 const app = express();
 
-//Middleware
-app.use(bodyParser.json());
 app.use(cors());
+app.use(bodyParser.json());
+const port = 5000;
+//MongoDB connection
+mongoose.connect('mongodb+srv://kulkarnisarvesh96:Sarvesh_2001@cluster0.yeo3qzp.mongodb.net/').then(()=> console.log('Connected to MongoDB')).catch(err => console.log('Could not connect to mongo db...', err));
 
-const dbURI ='mongodb+srv://kulkarnisarvesh96:Sarvesh_2001@cluster0.yeo3qzp.mongodb.net/';
-mongoose.connect(dbURI).then(()=> console.log('MongoDB connected')).catch(err=> console.log(err));
+const userSchema = new mongoose.Schema({
+    firstname: { type: String, required: true},
+    lastname: { type: String, required: true},
+    email: {type: String, required: true, unique: true},
+    password: {type: String, required: true},
 
-//User model
-const User = require('./models/User');
+});
 
-//Registration route
-app.post('/api/register', async(req, res) => {
-    const { firstname, lastname, email, password} = req.body;
-    try {
-        let user = await User.findOne({ email });
+const userLogin = new mongoose.Schema({
+    email: {type: String, required: true, unique: true},
+    passwordHash: {type: String, required: true},
+});
+
+const Users = mongoose.model('UserLogin', userLogin);
+
+const User = mongoose.model('User', userSchema);
+
+app.post('/register', async(req, res) => {
+    try{
+        const {firstname, lastname, email, password} = req.body;
+        let user = await User.findOne({email});
         if(user) {
-            return res.status(400).json({ msg: 'User already exists'});
+            return res.status(400).send('User already exists');
         }
+        //Hash the password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
-        //Create new user
         user = new User({
             firstname, 
-            lastname,
+            lastname, 
             email,
-            password,
+            password: hashedPassword,
         });
-
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(password, salt);
 
         await user.save();
 
-        //return jsonwebtoken
-        const payload = {
-            user: {
-                id: user.id,
-            }
-        };
-
-        jwt.sign(
-            payload, 
-            '1b31452d25e07af5f829ae3e170b66a9118279ac93c0ba48e696163688917bd76dfd10686287df943a5635f7f09b59fbf479ccb943617f14708c027d6afe072a ',
-            { expiresIn: 360000},
-            (err, token) => {
-                if(err) throw err;
-                res.json({ token });
-            }
-        );
+        const token  = jwt.sign({ id: user._id}, '9a06372b660788e09abc2f0d7af0f6ad0e8deb167430e6a46b92202d1c1a8472278fbfeacabb8ed74cb1b96e64c023f1ebb0665d5772169bc825762a5ec8f6aa', {expiresIn: '1h'});
+        res.status(200).json({ message: 'User registered successfully', token});
     } catch(err) {
-        console.error(err.message);
-        res.status(500).send('Server error');
+        res.status(500).send('Error saving user');
     }
 });
 
-//Start the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+const router = express.Router();
+
+router.post('/login', async(req, res) => {
+    const {email, password} = req.body;
+    
+    try {
+        const user = await Users.findOne({email});
+        if(!user) {
+            return res.status(400).json({ message: 'Inavlid credentials'});
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+        if(!isPasswordValid) {
+            return res.status(400).json({message: 'Invalid credentials'});
+        }
+
+        //generate JWT Token
+        const token = jwt.sign({ id: user._id}, '9a06372b660788e09abc2f0d7af0f6ad0e8deb167430e6a46b92202d1c1a8472278fbfeacabb8ed74cb1b96e64c023f1ebb0665d5772169bc825762a5ec8f6aa', {expiresIn: '1h'});
+        res.status(200).json({message: 'Login successful', token});
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({message: 'Server error'});
+    }
+})
+
+app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
 });

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './register.css';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const Register = () => {
     const [firstname, setFirstName] = useState('');
     const [lastname, setLastName] = useState('');
@@ -11,23 +11,34 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const[cnfpassword, setcnfPassword] = useState('');
     const[message, setMessage] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async(e) => {
       e.preventDefault();
-      const newUser = {firstname, lastname, email, password};
+      const user = {firstname, lastname, email, password};
+      if (password !== cnfpassword) {
+        setMessage('Passwords do not match');
+        return;
+      }
 
       try {
-        const res = await axios.post('http://localhost:5000/api/register', newUser);
+        const res = await axios.post('http://localhost:5000/register/', user);
         setMessage('User registered succesfull.');
+        localStorage.setItem('token', res.data.token);
+        navigate('/Login');
       } catch(err) {
-        setMessage('Error registering user');
+        if(err.response && err.response.status === 400){
+          setMessage('User already exists');
+        } else {
+          setMessage('Error registering users');
+        }
         console.error(err);
       }
     };
 
     return (
     <div>
-      <form class="form" onSubmit={Register}>
+      <form class="form" onSubmit={handleSubmit}>
         <p class="title">Register </p>
         <p class="message">Register and Unleash Productivity. Your journey to effortless Task Management Begins here </p>
         {message && <p className="message">{message}</p>}
