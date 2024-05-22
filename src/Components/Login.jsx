@@ -20,9 +20,9 @@ const Login = ({handleLoginClick}) => {
          return;
       }
       try {
-         const res = await axios.post('http://localhost:5000/login/', candidate);
+         const res = await axios.post('http://localhost:5000/login', candidate);
          setMessage('Login successfully');
-         localStorage.setItem('token', res.data.toke);
+         localStorage.setItem('token', res.data.token);
          navigate('/Register');
       } catch(err) {
          setMessage('Invalid credentials');
@@ -32,23 +32,21 @@ const Login = ({handleLoginClick}) => {
 
    return(
       <div>
-      <form class="form">
-         <p class="title">Login </p>
-         <p class="message">Login and Unleash Productivity. Your journey to effortless Task Management Begins here </p>
+      <form className="form" onSubmit={handleLogin}>
+         <p className="title">Login </p>
+         <p className="message">Login and Unleash Productivity. Your journey to effortless Task Management Begins here </p>
          {message && <p className="message">{message}</p>}
             <label for="email">Email
-               <input class="input" id="email" type="email" placeholder="" required="" />
+               <input className="input" id="email" type="email" placeholder="" required="" name="email" value={email} onChange={(e)=> setEmail(e.target.value)} />
             </label> 
             <label for="name">Password
-               <input class="input" id="password" type="password" placeholder="" required="" />
-               
+               <input className="input" id="password" type="password" placeholder="" required="" name="password" value={password} onChange={(e)=> setPassword(e.target.value)} />
             </label>
             <label for="cnfpassword">Confirm Password
-               <input class="input" id="cnfpassword" type="password" placeholder="" required="" />
-               
+               <input className="input" id="cnfpassword" type="password" placeholder="" required="" name="cnfPassword" value={cnfpassword} onChange={(e)=> setCnfPassword(e.target.value)} />      
             </label>
-            <button class="submit">Submit</button>
-            <p class="signin">Don't have an account ? <Link to="/Register"> Signin</Link> </p>
+            <button className="submit" type="Submit">Submit</button>
+            <p className="signin">Don't have an account ? <Link to="/Register"> Signin</Link> </p>
          </form>
       </div>
    );

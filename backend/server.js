@@ -11,7 +11,10 @@ app.use(cors());
 app.use(bodyParser.json());
 const port = 5000;
 //MongoDB connection
-mongoose.connect('mongodb+srv://kulkarnisarvesh96:Sarvesh_2001@cluster0.yeo3qzp.mongodb.net/').then(()=> console.log('Connected to MongoDB')).catch(err => console.log('Could not connect to mongo db...', err));
+mongoose.connect('mongodb+srv://kulkarnisarvesh96:Sarvesh_2001@cluster0.yeo3qzp.mongodb.net/', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(()=> console.log('Connected to MongoDB')).catch(err => console.log('Could not connect to mongo db...', err));
 
 const userSchema = new mongoose.Schema({
     firstname: { type: String, required: true},
@@ -21,15 +24,9 @@ const userSchema = new mongoose.Schema({
 
 });
 
-const userLogin = new mongoose.Schema({
-    email: {type: String, required: true, unique: true},
-    passwordHash: {type: String, required: true},
-});
-
-const Users = mongoose.model('UserLogin', userLogin);
-
 const User = mongoose.model('User', userSchema);
 
+//Register route
 app.post('/register', async(req, res) => {
     try{
         const {firstname, lastname, email, password} = req.body;
@@ -57,30 +54,27 @@ app.post('/register', async(req, res) => {
     }
 });
 
-const router = express.Router();
 
-router.post('/login', async(req, res) => {
-    const {email, password} = req.body;
-    
+//login route
+app.post('/login', async(req, res) => {
     try {
-        const user = await Users.findOne({email});
-        if(!user) {
-            return res.status(400).json({ message: 'Inavlid credentials'});
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+        if(!user){
+            return res.status(400).send('Invalid credentials');
         }
 
-        const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
-        if(!isPasswordValid) {
-            return res.status(400).json({message: 'Invalid credentials'});
+        const validPassword = await bcrypt.compare(password, user.password);
+        if(!validPassword) {
+            return res.status(400).send('Invalid credentials');
         }
-
-        //generate JWT Token
         const token = jwt.sign({ id: user._id}, '9a06372b660788e09abc2f0d7af0f6ad0e8deb167430e6a46b92202d1c1a8472278fbfeacabb8ed74cb1b96e64c023f1ebb0665d5772169bc825762a5ec8f6aa', {expiresIn: '1h'});
-        res.status(200).json({message: 'Login successful', token});
+        res.status(200).json({ message: 'User loggedn in successfully', token});
     } catch(err) {
         console.error(err);
-        res.status(500).json({message: 'Server error'});
+        res.status(500).send("Error logging in user");
     }
-})
+});
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
