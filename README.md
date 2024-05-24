@@ -1,71 +1,55 @@
-# taskmanager
-# Getting Started with Create React App
+# 📝 Task Manager Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Project Description
+Task Manager is a web application designed to help users manage their tasks efficiently. Users can log in, create, update, and delete tasks, as well as mark them as completed. The application provides a user-friendly interface for organizing tasks.
 
-## Available Scripts
+## Technologies Used
+- **Frontend:**
+  - ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+  - ![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
+  - ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+  - ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+- **Backend:**
+  - ![Node.js](https://img.shields.io/badge/Node.js-43853D?logo=node.js&logoColor=white)
+  - ![Express](https://img.shields.io/badge/Express-000000?logo=express&logoColor=white)
+- **Database:**
+  - ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?logo=mongodb&logoColor=white)
+- **Authentication:**
+  - ![JWT](https://img.shields.io/badge/JWT-000000?logo=JSON%20web%20tokens&logoColor=white)
+  - ![bcrypt](https://img.shields.io/badge/bcrypt-4A90E2?logo=)
+## Features
+- ✅ **Task Management:** Create, update, delete, and mark tasks as completed.
+- 🔒 **User Authentication:** Secure login using JSON Web Tokens (JWT) and password hashing with bcrypt.
+- 🔄 **Real-Time Updates:** View and manage tasks in real-time without page reloads.
+- 📋 **Task Categories:** Organize tasks into categories for better management.
 
-In the project directory, you can run:
+## Installation Instructions
+### Prerequisites
+- Node.js and npm installed on your system
+- MongoDB Atlas account (or local MongoDB installation)
 
-### `npm start`
+### Steps
+1. **Clone the Repository:**
+   ```sh
+   git clone https://github.com/your-username/task-manager.git
+   cd task-manager
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+   cd backend
+   npm install
+   start with jwt token secret key 'cd models' node generateSecret.js' and copy the generated key and replace the line jwt_secret_key in code and to comeback to backend directory or previous directory in cmd or terminal type the command 'cd ..' 
+   optional: You can also start with nodemon if you are interest in it so you can go for it by 'npm install nodemon' and command to run is nodemon server.js
+   node server.js
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+   cd frontend
+   npm install
+   npm start
 
-### `npm test`
+**Configure MongoDB**:
+Create a MongoDB Atlas cluster or use a local MongoDB installation.
+Update the MongoDB URI in the backend configuration (if necessary).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Open the Application**:
+Open a web browser and go to http://localhost:3000 to access the Task Manager application.
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**Contributing**
+Contributions are welcome! Feel free to submit issues or pull requests to improve the project.
