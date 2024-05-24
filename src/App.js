@@ -3,12 +3,13 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Login from './Components/Login';
 import Register from './Components/Register';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { BrowserRouter as Router, useNavigate, Route, Routes, Link } from 'react-router-dom';
 import Navigation from './Components/Navigation';
 import React from 'react';
 import { Navbar } from 'react-bootstrap';
-import Home from './Home';
+import HomePage from './Components/HomePage';
 function App() {
   const [isFixedTop, setIsFixedTop] = useState(false);
   const handleLoginClick = () => {
@@ -42,7 +43,7 @@ function App() {
         </div>
       </nav> 
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route path='/' element={<HomePage />} />
         <Route path='/Login' element={<Login handleLoginClick={handleLoginClick} />} />
         <Route path='/Register' element={<Register />} />
       </Routes>
