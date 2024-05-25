@@ -23,7 +23,7 @@ const Login = ({handleLoginClick}) => {
          const res = await axios.post('http://localhost:5000/login', candidate);
          setMessage('Login successfully');
          localStorage.setItem('token', res.data.token);
-         navigate('/HomePage');
+         navigate('/');
       } catch(err) {
          setMessage('Invalid credentials');
          console.error(err);

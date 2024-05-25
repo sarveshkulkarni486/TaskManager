@@ -16,6 +16,25 @@ mongoose.connect('mongodb+srv://kulkarnisarvesh96:Sarvesh_2001@cluster0.yeo3qzp.
     useUnifiedTopology: true,
 }).then(()=> console.log('Connected to MongoDB')).catch(err => console.log('Could not connect to mongo db...', err));
 
+
+// Middleware to verify JWT
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    
+    if (token == null) return res.sendStatus(401);
+
+    jwt.verify(token, '9a06372b660788e09abc2f0d7af0f6ad0e8deb167430e6a46b92202d1c1a8472278fbfeacabb8ed74cb1b96e64c023f1ebb0665d5772169bc825762a5ec8f6aa', (err, user) => {
+        if (err) {
+            console.log('Invalid token');
+            return res.sendStatus(403); // Forbidden
+        }
+        console.log('Token is valid:', user);
+        req.user = user;
+        next();
+    });
+};
+
 const userSchema = new mongoose.Schema({
     firstname: { type: String, required: true},
     lastname: { type: String, required: true},
@@ -68,7 +87,11 @@ app.post('/login', async(req, res) => {
         if(!validPassword) {
             return res.status(400).send('Invalid credentials');
         }
-        const token = jwt.sign({ id: user._id, firstname: user.firstname, lastname: user.lastname, email: user.email}, '9a06372b660788e09abc2f0d7af0f6ad0e8deb167430e6a46b92202d1c1a8472278fbfeacabb8ed74cb1b96e64c023f1ebb0665d5772169bc825762a5ec8f6aa', {expiresIn: '1h'});
+        const token = jwt.sign(
+            { id: user._id, firstname: user.firstname, lastname: user.lastname, email: user.email },
+            '9a06372b660788e09abc2f0d7af0f6ad0e8deb167430e6a46b92202d1c1a8472278fbfeacabb8ed74cb1b96e64c023f1ebb0665d5772169bc825762a5ec8f6aa',
+            { expiresIn: '1h' }
+        );
         res.status(200).json({ message: 'User loggedn in successfully', token});
     } catch(err) {
         console.error(err);
@@ -76,8 +99,8 @@ app.post('/login', async(req, res) => {
     }
 });
 
-app.get('/getUser', (req, res) => {
-    UserModel.find().then(users=> res.json(users)).catch(err => res.status(err));
+app.get('/getUser', authenticateToken, (req, res) => {
+    res.json(req.user);
 })
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
